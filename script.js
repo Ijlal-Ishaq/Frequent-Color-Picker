@@ -14,13 +14,25 @@ async function getMostFrequentColor(imgUrl) {
     for (let i = 0; i < w; i++) {
         for(let j = 0; j < h; j++){
             temp = Jimp.intToRGBA(image.getPixelColor(i, j));
-            temp = temp.r+","+temp.g+","+temp.b+","+temp.a;
-            
-            if(colors[temp] == undefined){
-                colors[temp] = 0;
-            }else{
-                colors[temp]++;
+
+            // if you want to consider white remove the !isWhite condition.
+            if(temp.a > 0 && !isWhite(temp)){
+                temp = temp.r+","+temp.g+","+temp.b+","+temp.a;
+
+                if(colors[temp] == undefined){
+                    colors[temp] = 0;
+                }else{
+                    colors[temp]++;
+                }
             }
+        }
+    }
+
+    function isWhite(color){
+        if(color.r >= 240 && color.r <= 255 && color.g >= 240 && color.g <= 255 && color.b >= 240 && color.b <= 255){
+            return true;
+        }else{
+            return false;
         }
     }
     
@@ -38,7 +50,7 @@ async function getMostFrequentColor(imgUrl) {
 }
 
 async function main(){
-    let color = await getMostFrequentColor("https://s2.coinmarketcap.com/static/img/coins/200x200/825.png");
+    let color = await getMostFrequentColor("https://s2.coinmarketcap.com/static/img/coins/200x200/4943.png");
     console.log(color);
 }    
 
